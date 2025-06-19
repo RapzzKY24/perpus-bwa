@@ -23,7 +23,7 @@ class CategoryController extends Controller
     public function index () :Response
     {
         $categories = Category::query()
-        ->select(['id','name','slug','cover','created_at'])
+        ->select(['id','name','slug','description','cover','created_at'])
         ->get();
         return inertia('Admin/Categories/Index',[
             'categories'=> CategoryResource::collection($categories),
@@ -72,7 +72,7 @@ class CategoryController extends Controller
         return inertia('Admin/Categories/Edit',[
             'page_setting' => [
                 'title' => 'Edit Kategori',
-                'subtittle' => 'Edit Kategori Disini , Simpan Setelah Selesai',
+                'subtitle' => 'Edit Kategori Disini , Simpan Setelah Selesai',
                 'method' => 'PUT',
                 'action'=> route('admin.categories.update',$category)
             ],

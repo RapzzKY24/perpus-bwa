@@ -19,6 +19,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'description'=>$this->description,
             'cover' => $this->cover ? Storage::url($this->cover) : null,
             'created_at' => $this->created_at->format('d M Y'),
         ];
