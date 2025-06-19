@@ -24,13 +24,30 @@ class CategoryController extends Controller
     {
         $categories = Category::query()
         ->select(['id','name','slug','description','cover','created_at'])
-        ->get();
+        ->when(request()->search,function($query,$value){
+            $query ->whereAny([
+                'name',
+                'slug'
+
+            ],'REGEXP',$value);
+        })
+        ->paginate(request()->load ??10)
+        -> withQueryString();
         return inertia('Admin/Categories/Index',[
-            'categories'=> CategoryResource::collection($categories),
+            'categories'=> CategoryResource::collection($categories)->additional([
+                'meta' => [
+                    'has_pages' => $categories->hasPages()
+                ]
+            ]),
             'page_setting'=> [
                 'title' => 'Kategori',
                 'subtitle'=> 'Menampilkan semua daftar kategori yang tersedia pada plafrom ini'
             ],
+            'state' =>[
+                'page' => request()->page ?? 1,
+                'search' => request()->search ?? "",
+                'load' => 10
+            ]
         ]);
     }
 

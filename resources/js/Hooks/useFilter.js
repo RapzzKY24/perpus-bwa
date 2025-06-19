@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react";
 import { useCallback, useEffect } from "react";
-import pkg from "loadash";
+import pkg from "lodash";
 
 const useFilter = ({ route, values, only, wait = 300 }) => {
     const { debounce, pickBy } = pkg;

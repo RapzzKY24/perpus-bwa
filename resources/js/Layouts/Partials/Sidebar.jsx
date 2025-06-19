@@ -19,19 +19,8 @@ import {
     IconUsersGroup,
     IconVersions,
 } from "@tabler/icons-react";
-import { Head, Link } from "@inertiajs/react";
+
 import NavLink from "@/Components/NavLink";
-import { Avatar, AvatarFallback } from "@/Components/ui/avatar";
-import { Button } from "@/Components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/Components/ui/dropdown-menu";
-import { Toaster } from "@/Components/ui/sonner";
 import React from "react";
 
 const Sidebar = ({ url, auth }) => {

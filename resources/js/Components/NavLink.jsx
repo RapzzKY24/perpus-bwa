@@ -14,7 +14,7 @@ const NavLink = ({
             href={url}
             className={cn(
                 active
-                    ? "bg-gradient-to-r from-indigo-600 via-indigo-600 to-indigo-500 font-semibold text-white  hover:text-white"
+                    ? "bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 font-semibold text-white  hover:text-white"
                     : "text-muted-foreground hover:text-indigo-500",
                 "flex items-center gap-3 rounded-lg font-medium transition-all p-3"
             )}
