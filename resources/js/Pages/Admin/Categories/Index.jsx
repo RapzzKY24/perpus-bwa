@@ -55,7 +55,7 @@ import { toast } from "sonner";
 
 const Index = (props) => {
     const { data: categories, meta } = props.categories;
-    const [params, setParams] = useState("");
+    const [params, setParams] = useState(props.state);
     useFilter({
         route: route("admin.categories.index"),
         values: params,
@@ -101,7 +101,7 @@ const Index = (props) => {
                                 <SelectValue placeholder="Load" />
                             </SelectTrigger>
                             <SelectContent>
-                                {[10, 20, 25, 30].map((number, index) => (
+                                {[5, 10, 20, 25, 30].map((number, index) => (
                                     <SelectItem key={index} value={number}>
                                         {number}
                                     </SelectItem>
