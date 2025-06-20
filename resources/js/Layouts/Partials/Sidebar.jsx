@@ -63,7 +63,8 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconCategory}
                     />
                     <NavLink
-                        url="#"
+                        url={route("admin.publishers.index")}
+                        active={url.startsWith("/admin/publishers")}
                         title="Penulis"
                         icon={IconBuildingCommunity}
                     />

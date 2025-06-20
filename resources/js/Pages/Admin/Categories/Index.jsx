@@ -85,7 +85,6 @@ const Index = (props) => {
                         Tambah
                     </Link>
                 </Button>
-                {console.log("categories:", props.categories)}
             </div>
             <Card>
                 <CardHeader>

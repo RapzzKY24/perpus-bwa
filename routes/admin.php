@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\PublisherController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -14,4 +15,16 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::delete('categories/destroy/{category}','destroy')->name('admin.categories.destroy');
     });
 
+    Route::controller(PublisherController::class)->group(function(){
+        Route::get('publishers','index')->name('admin.publishers.index');
+        Route::get('publishers/create','create')->name('admin.publishers.create');
+        Route::post('publishers/create','store')->name('admin.publishers.store');
+        Route::get('publishers/edit/{publisher}','edit')->name('admin.publishers.edit');
+        Route::put('publishers/edit/{publisher}','update')->name('admin.publishers.update');
+        Route::delete('publishers/destroy/{publisher}','destroy')->name('admin.publishers.destroy');
+    });
+
+
 });
+
+
