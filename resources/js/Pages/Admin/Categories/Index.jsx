@@ -59,7 +59,7 @@ import { toast } from "sonner";
 const Index = (props) => {
     const { data: categories, meta } = props.categories;
     const [params, setParams] = useState(props.state);
-    const onSearchTable = (field) => {
+    const onSortTable = (field) => {
         setParams({
             ...params,
             field: field,
@@ -135,7 +135,7 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="inline-flex group"
-                                        onClick={() => onSearchTable("id")}
+                                        onClick={() => onSortTable("id")}
                                     >
                                         #
                                         <span className="ml-2 flex-none  text-muted-foreground">
@@ -147,7 +147,7 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="inline-flex group"
-                                        onClick={() => onSearchTable("name")}
+                                        onClick={() => onSortTable("name")}
                                     >
                                         Nama
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
@@ -159,7 +159,7 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="inline-flex group"
-                                        onClick={() => onSearchTable("slug")}
+                                        onClick={() => onSortTable("slug")}
                                     >
                                         Slug
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
@@ -172,7 +172,7 @@ const Index = (props) => {
                                         variant="ghost"
                                         className="inline-flex group"
                                         onClick={() =>
-                                            onSearchTable("description")
+                                            onSortTable("description")
                                         }
                                     >
                                         Deskripsi
@@ -187,7 +187,7 @@ const Index = (props) => {
                                         variant="ghost"
                                         className="inline-flex group"
                                         onClick={() =>
-                                            onSearchTable("created_at")
+                                            onSortTable("created_at")
                                         }
                                     >
                                         Dibuat pada

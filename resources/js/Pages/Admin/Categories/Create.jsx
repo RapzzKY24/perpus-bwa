@@ -108,7 +108,7 @@ const Create = (props) => {
                                 >
                                     Reset
                                 </Button>
-                                <Button type="submit" variant="green" size="lg">
+                                <Button type="submit" variant="blue" size="lg">
                                     Save
                                 </Button>
                             </div>

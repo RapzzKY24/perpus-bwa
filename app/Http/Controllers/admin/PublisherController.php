@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\MessageType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
+use App\Http\Requests\Admin\PublisherRequest;
 use App\Http\Resources\Admin\PublisherResource;
+use App\Models\Category;
 use App\Models\Publisher;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use App\Traits\Hasfile;
 use Inertia\Response;
+use Throwable;
 
 class PublisherController extends Controller
 {
     //
+
+    use Hasfile;
+
     public function index():Response
     {
         $publisher = Publisher::query()
@@ -21,10 +30,12 @@ class PublisherController extends Controller
             'address',
             'email',
             'phone',
+            'created_at',
             'logo'
         ])
         ->filter(request()->only(['search']))
         ->sorting(request()->only(['field','direction']))
+        ->latest('created_at')
         ->paginate(request()->load ?? 10)
         -> withQueryString();
         return inertia('Admin/Publishers/Index',[
@@ -46,5 +57,68 @@ class PublisherController extends Controller
     }
 
 
+    public function create():Response
+    {
+        return inertia('Admin/Publishers/Create',[
+            'page_setting'=> [
+                'title' => 'Tambah Penulis',
+                'subtitle' => 'Buat Penulis Baru Disini , jangan klik save!',
+                'method' => 'POST',
+                'action' => route('admin.publishers.store')
+            ]
+        ]);
+    }
+
+    public function store(PublisherRequest $request):RedirectResponse
+    {
+        try {
+            Publisher::create([
+                'name' => $name = $request -> name,
+                'slug' => str()->lower(str()->slug($name).str()->random(4)),
+                'address' => $request->address,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'logo' => $this->upload_file($request,'logo','publishers'),
+            ]);
+            flashMessage(MessageType::CREATED->message('Penulis'));
+            return to_route('admin.publishers.index');
+        } catch (Throwable $e) {
+            flashMessage(MessageType::ERROR->message(error : $e -> getMessage()),'error');
+            return to_route('admin.publishers.index');
+        }
+    }
+
+    public function edit(Publisher $publisher):Response
+    {
+       return inertia('Admin/Publishers/Edit',[
+            'page_setting'=>[
+                'title' => 'Edit Penulis',
+                'subtitle' => 'Edit Penulis Disini Simpan jika sudah selesai!',
+                'method' => 'PUT',
+                'action' => route('admin.publishers.update',$publisher)
+            ],
+            'publisher' => $publisher
+       ]);
+    }
+
+    public function update(Publisher $publisher,PublisherRequest $request):RedirectResponse
+    {
+        try {
+            //code...
+            $publisher -> update([
+                'name' => $name = $request -> name,
+                'address' => $request->address,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'slug' =>$name !== $publisher->name ? str()->lower(str()->slug($name).str()->random(4)) : $publisher->slug,
+                'logo' => $this->update_file($request,$publisher,'logo','publishers'),
+            ]);
+            flashMessage(MessageType::UPDATED->message('Penulis'));
+            return to_route('admin.publishers.index');
+        } catch (Throwable $e) {
+            flashMessage(MessageType::ERROR->message(error :$e ->getMessage()),'error');
+            return to_route('admin.publishers.index');
+        }
+    }
 
 }
