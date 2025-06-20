@@ -20,17 +20,28 @@ class CategoryFactory extends Factory
             //
             'name'=> $name = $this->faker->unique()->randomElement([
                 'Fiksi',
-                'non-Fiksi',
-                'Ilmu Pengetahuan',
+                'Non-Fiksi',
+                'Novel Remaja',
+                'Biografi',
+                'Ilmu Pengetahuan Alam',
+                'Teknologi Informasi',
                 'Bahasa dan Sastra',
                 'Matematika',
-                'Sejarah',
-                'Anak-Anak',
-                'Teknologi',
-                'Self Improvment',
-                'Misteri'
+                'Sejarah Dunia',
+                'Anak-anak',
+                'Pengembangan Diri',
+                'Religi dan Spiritualitas',
+                'Psikologi',
+                'Kesehatan & Gaya Hidup',
+                'Hukum & Politik',
+                'Komik & Manga',
+                'Ekonomi & Bisnis',
+                'Sains Populer',
+                'Filsafat',
+                'Petualangan & Misteri'
             ]),
-            'slug'=> str()->lower(str()->slug($name).str()->random(4))
+            'slug'=> str()->lower(str()->slug($name).str()->random(4)),
+            'description' => $this->faker->sentence(8),
         ];
     }
 }

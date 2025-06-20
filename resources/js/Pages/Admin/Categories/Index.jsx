@@ -45,9 +45,12 @@ import { flashMessage } from "@/lib/utils";
 import { Link, router } from "@inertiajs/react";
 import { SelectValue } from "@radix-ui/react-select";
 import {
+    IconArrowsDownUp,
     IconCategory,
     IconPencil,
     IconPlus,
+    IconRefresh,
+    IconTrack,
     IconTrash,
 } from "@tabler/icons-react";
 import { useState } from "react";
@@ -56,6 +59,13 @@ import { toast } from "sonner";
 const Index = (props) => {
     const { data: categories, meta } = props.categories;
     const [params, setParams] = useState(props.state);
+    const onSearchTable = (field) => {
+        setParams({
+            ...params,
+            field: field,
+            direction: params.direction === "asc" ? "desc" : "asc",
+        });
+    };
     useFilter({
         route: route("admin.categories.index"),
         values: params,
@@ -108,18 +118,85 @@ const Index = (props) => {
                                 ))}
                             </SelectContent>
                         </Select>
+                        <Button
+                            variant="red"
+                            onClick={() => setParams(props.state)}
+                            size="xl"
+                        >
+                            <IconRefresh className="size-4" />
+                            Bersihkan
+                        </Button>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
-                                <TableHead>No</TableHead>
-                                <TableHead>Nama</TableHead>
-                                <TableHead>Slug</TableHead>
-                                <TableHead>Deskripsi</TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="inline-flex group"
+                                        onClick={() => onSearchTable("id")}
+                                    >
+                                        #
+                                        <span className="ml-2 flex-none  text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="inline-flex group"
+                                        onClick={() => onSearchTable("name")}
+                                    >
+                                        Nama
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="inline-flex group"
+                                        onClick={() => onSearchTable("slug")}
+                                    >
+                                        Slug
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="inline-flex group"
+                                        onClick={() =>
+                                            onSearchTable("description")
+                                        }
+                                    >
+                                        Deskripsi
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
                                 <TableHead>Cover</TableHead>
-                                <TableHead>Dibuat Pada</TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="inline-flex group"
+                                        onClick={() =>
+                                            onSearchTable("created_at")
+                                        }
+                                    >
+                                        Dibuat pada
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-10 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
                                 <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
