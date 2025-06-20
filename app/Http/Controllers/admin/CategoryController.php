@@ -41,7 +41,7 @@ class CategoryController extends Controller
             'state' =>[
                 'page' => request()->page ?? 1,
                 'search' => request()->search ?? "",
-                'load' => 10
+                'load' => 5
             ]
         ]);
     }

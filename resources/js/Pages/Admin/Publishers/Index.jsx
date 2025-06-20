@@ -53,6 +53,7 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const Index = (props) => {
     const [params, setParams] = useState(props.state);
@@ -113,7 +114,7 @@ const Index = (props) => {
                                 <SelectValue placeholder="Load" />
                             </SelectTrigger>
                             <SelectContent>
-                                {[10, 20, 25, 30].map((number, index) => (
+                                {[5, 10, 20, 25, 30].map((number, index) => (
                                     <SelectItem key={index} value={number}>
                                         {number}
                                     </SelectItem>
@@ -313,17 +314,16 @@ const Index = (props) => {
                         </TableBody>
                     </Table>
                 </CardContent>
-
                 <CardFooter className="flex flex-col items-center justify-between w-full py-2 border-t lg:flex-row">
                     <p className="mb-2 font-sm text-muted-foreground">
-                        Menampilkan{" "}
-                        <span className="font-medium text-indigo-500">
+                        menampilkan{""}{" "}
+                        <span className="font-medium text-indigo-500 ">
                             {meta.from ?? 0}
                         </span>{" "}
-                        dari {meta.total} Penulis
+                        dari {meta.total} kategori
                     </p>
-                    {meta.has_pages && (
-                        <div className="overflow-x-auto">
+                    <div className="overflow-x-auto">
+                        {meta.has_pages && (
                             <Pagination>
                                 <PaginationContent className="flex flex-wrap justify-center lg:justify-end">
                                     {meta.links.map((link, index) => (
@@ -341,8 +341,8 @@ const Index = (props) => {
                                     ))}
                                 </PaginationContent>
                             </Pagination>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </CardFooter>
             </Card>
         </div>
