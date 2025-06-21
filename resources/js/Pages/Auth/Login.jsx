@@ -1,50 +1,46 @@
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import InputError from "@/Components/InputError";
-import PrimaryButton from "@/Components/PrimaryButton";
-import { Alert, AlertDescription } from "@/Components/ui/alert";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { Checkbox } from "@/Components/ui/checkbox";
-import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { Button } from "@/Components/ui/button";
+import ApplicationLogo from '@/Components/ApplicationLogo';
+import InputError from '@/Components/InputError';
+import { Alert, AlertDescription } from '@/Components/ui/alert';
+import { Button } from '@/Components/ui/button';
+import { Checkbox } from '@/Components/ui/checkbox';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import GuestLayout from '@/Layouts/GuestLayout';
+import { Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: "",
-        password: "",
+        email: '',
+        password: '',
         remember: false,
     });
 
     const onHandleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("login"), {
-            onFinish: () => reset("password"),
+        post(route('login'), {
+            onFinish: () => reset('password'),
         });
     };
 
     return (
-        <div className="w-full h-screen overflow-hidden lg:grid lg:grid-cols-2">
+        <div className="h-screen w-full overflow-hidden lg:grid lg:grid-cols-2">
             {/* Kiri - Form */}
             <div className="flex flex-col px-6 py-4">
                 <ApplicationLogo size="size-12" />
 
-                <div className="flex flex-col items-center justify-center flex-1 py-12">
+                <div className="flex flex-1 flex-col items-center justify-center py-12">
                     <div className="mx-auto flex w-full flex-col gap-6 lg:w-1/2">
                         {/* Status Message */}
                         <div className="grid gap-2 text-center">
                             {status && (
                                 <Alert variant="success">
-                                    <AlertDescription>
-                                        {status}
-                                    </AlertDescription>
+                                    <AlertDescription>{status}</AlertDescription>
                                 </Alert>
                             )}
                             <h1 className="text-3xl font-bold">Masuk</h1>
                             <p className="text-muted-foreground">
-                                Masukkan email di bawah ini untuk masuk ke akun
-                                Anda.
+                                Masukkan email di bawah ini untuk masuk ke akun Anda.
                             </p>
                         </div>
 
@@ -62,13 +58,9 @@ export default function Login({ status, canResetPassword }) {
                                         autoComplete="username"
                                         autoFocus
                                         placeholder="johndoe@gmail.com"
-                                        onChange={(e) =>
-                                            setData("email", e.target.value)
-                                        }
+                                        onChange={(e) => setData('email', e.target.value)}
                                     />
-                                    {errors.email && (
-                                        <InputError message={errors.email} />
-                                    )}
+                                    {errors.email && <InputError message={errors.email} />}
                                 </div>
 
                                 {/* Password */}
@@ -81,13 +73,9 @@ export default function Login({ status, canResetPassword }) {
                                         placeholder="********"
                                         value={data.password}
                                         autoComplete="current-password"
-                                        onChange={(e) =>
-                                            setData("password", e.target.value)
-                                        }
+                                        onChange={(e) => setData('password', e.target.value)}
                                     />
-                                    {errors.password && (
-                                        <InputError message={errors.password} />
-                                    )}
+                                    {errors.password && <InputError message={errors.password} />}
                                 </div>
 
                                 {/* Remember Me & Forgot */}
@@ -96,35 +84,20 @@ export default function Login({ status, canResetPassword }) {
                                         <Checkbox
                                             id="remember"
                                             checked={data.remember}
-                                            onCheckedChange={(checked) =>
-                                                setData("remember", checked)
-                                            }
+                                            onCheckedChange={(checked) => setData('remember', checked)}
                                         />
-                                        <Label htmlFor="remember">
-                                            Ingat saya
-                                        </Label>
+                                        <Label htmlFor="remember">Ingat saya</Label>
                                     </div>
                                     {canResetPassword && (
-                                        <Link
-                                            href={route("password.request")}
-                                            className="text-sm underline"
-                                        >
+                                        <Link href={route('password.request')} className="text-sm underline">
                                             Lupa Password?
                                         </Link>
                                     )}
                                 </div>
-                                {errors.remember && (
-                                    <InputError message={errors.remember} />
-                                )}
+                                {errors.remember && <InputError message={errors.remember} />}
 
                                 {/* Submit Button */}
-                                <Button
-                                    type="submit"
-                                    variant="blue"
-                                    size="xl"
-                                    className="w-full"
-                                    disabled={processing}
-                                >
+                                <Button type="submit" variant="blue" size="xl" className="w-full" disabled={processing}>
                                     Masuk
                                 </Button>
                             </div>
@@ -132,11 +105,8 @@ export default function Login({ status, canResetPassword }) {
 
                         {/* Register link */}
                         <div className="text-center text-sm">
-                            Belum punya akun?{" "}
-                            <Link
-                                href={route("register")}
-                                className="underline"
-                            >
+                            Belum punya akun?{' '}
+                            <Link href={route('register')} className="underline">
                                 Daftar
                             </Link>
                         </div>
@@ -146,16 +116,10 @@ export default function Login({ status, canResetPassword }) {
 
             {/* Kanan - Gambar */}
             <div className="hidden bg-muted lg:block">
-                <img
-                    src="/images/login.webp"
-                    alt="login"
-                    className="w-full h-full object-cover"
-                />
+                <img src="/images/login.webp" alt="login" className="h-full w-full object-cover" />
             </div>
         </div>
     );
 }
 
-Login.layout = (page) => (
-    <GuestLayout title="Login" children={page}></GuestLayout>
-);
+Login.layout = (page) => <GuestLayout title="Login" children={page}></GuestLayout>;

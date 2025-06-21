@@ -51,7 +51,7 @@ class PublisherController extends Controller
                 'state' => [
                     'page' => request()->page ??1,
                     'search' => request()->search?? "",
-                    'load' => 5
+                    'load' => 10
                 ]
             ]);
     }

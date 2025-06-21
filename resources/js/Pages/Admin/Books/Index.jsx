@@ -19,13 +19,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import { useFilter } from '@/Hooks/useFilter';
 import AppLayout from '@/Layouts/AppLayout';
-import { flashMessage } from '@/lib/utils';
+import { flashMessage, formatToRupiah } from '@/lib/utils';
 import { Link, router } from '@inertiajs/react';
-import { IconBuildingCommunity, IconPencil, IconPlus, IconRefresh, IconTrash } from '@tabler/icons-react';
+import { IconBooks, IconPencil, IconPlus, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 const Index = (props) => {
+    const { data: books, meta } = props.books;
     const [params, setParams] = useState(props.state);
 
     const onSortTable = (field) => {
@@ -37,23 +38,17 @@ const Index = (props) => {
     };
 
     useFilter({
-        route: route('admin.publishers.index'),
+        route: route('admin.books.index'),
         values: params,
-        only: ['publishers'],
+        only: ['books'],
     });
-
-    const { data: publishers, meta } = props.publishers;
 
     return (
         <div className="flex w-full flex-col pb-32">
             <div className="mb-8 flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
-                <HeaderTitle
-                    title={props.page_setting.title}
-                    subtitle={props.page_setting.subtitle}
-                    icon={IconBuildingCommunity}
-                />
+                <HeaderTitle title={props.page_setting.title} subtitle={props.page_setting.subtitle} icon={IconBooks} />
                 <Button variant="blue" size="lg" asChild>
-                    <Link href={route('admin.publishers.create')}>
+                    <Link href={route('admin.books.create')}>
                         <IconPlus size="4" />
                         Tambah
                     </Link>
@@ -65,7 +60,7 @@ const Index = (props) => {
                     <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center">
                         <Input
                             className="w-full sm:w-1/4"
-                            placeholder="cari penulis..."
+                            placeholder="Cari buku..."
                             value={params?.search}
                             onChange={(e) =>
                                 setParams((prev) => ({
@@ -87,90 +82,144 @@ const Index = (props) => {
                             </SelectContent>
                         </Select>
                         <Button variant="red" onClick={() => setParams(props.state)} size="xl">
-                            <IconRefresh className="size-4" />
-                            Bersihkan
+                            <IconRefresh className="size-4" /> Bersihkan
                         </Button>
                     </div>
                 </CardHeader>
-
-                <CardContent className="overflow-x-auto">
+                <CardContent>
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="whitespace-nowrap text-left">#</TableHead>
-                                <TableHead className="whitespace-nowrap text-left">
+                                <TableHead>#</TableHead>
+                                <TableHead>
                                     <SortableHeader
-                                        label="Nama"
-                                        field="name"
+                                        label="Judul"
+                                        field="title"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead className="whitespace-nowrap text-left">
+                                <TableHead>
                                     <SortableHeader
-                                        label="Slug"
-                                        field="slug"
+                                        label="Kode Buku"
+                                        field="book_code"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead className="whitespace-nowrap text-left">
+                                <TableHead>
                                     <SortableHeader
-                                        label="Alamat"
-                                        field="address"
+                                        label="Penulis"
+                                        field="author"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead className="whitespace-nowrap text-left">
+                                <TableHead>
                                     <SortableHeader
-                                        label="Email"
-                                        field="email"
+                                        label="ISBN"
+                                        field="isbn"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead className="whitespace-nowrap text-left">
+                                <TableHead>
                                     <SortableHeader
-                                        label="Nomor Handphone"
-                                        field="phone"
+                                        label="Bahasa"
+                                        field="language"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead className="whitespace-nowrap text-left">Dibuat Pada</TableHead>
-                                <TableHead className="w-[120px] text-center">Aksi</TableHead>
+                                <TableHead>Tahun</TableHead>
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Harga"
+                                        field="price"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Jumlah Halaman"
+                                        field="number_of_page"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <TableHead>Stok</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Kategori"
+                                        field="category_id"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Penerbit"
+                                        field="publisher_id"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Dibuat Pada"
+                                        field="created_at"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
-
                         <TableBody>
-                            {publishers.map((publisher, index) => (
-                                <TableRow key={index} className="transition hover:bg-muted">
-                                    <TableCell className="whitespace-nowrap text-left">
-                                        {index + 1 + (meta.current_page - 1) * meta.per_page}
+                            {books.map((book, index) => (
+                                <TableRow key={index} className="w-[140px] whitespace-nowrap text-center text-sm">
+                                    <TableCell>{index + 1 + (meta.current_page - 1) * meta.per_page}</TableCell>
+                                    <TableCell>{book.title}</TableCell>
+                                    <TableCell>{book.book_code}</TableCell>
+
+                                    <TableCell>{book.author}</TableCell>
+                                    <TableCell>{book.isbn}</TableCell>
+                                    <TableCell>{book.language}</TableCell>
+                                    <TableCell>{book.publication_year}</TableCell>
+                                    <TableCell>{formatToRupiah(book.price)}</TableCell>
+                                    <TableCell>{book.number_of_pages}</TableCell>
+                                    <TableCell>{book.stock?.total ?? 0}</TableCell>
+                                    <TableCell>
+                                        <span
+                                            className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                                                book.stock?.total > 0
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : 'bg-red-100 text-red-800'
+                                            }`}
+                                        >
+                                            {book.stock?.total > 0 ? 'Tersedia' : 'Kosong'}
+                                        </span>
                                     </TableCell>
-                                    <TableCell className="whitespace-nowrap text-left">{publisher.name}</TableCell>
-                                    <TableCell className="whitespace-nowrap text-left">{publisher.slug}</TableCell>
-                                    <TableCell className="whitespace-nowrap text-left">{publisher.address}</TableCell>
-                                    <TableCell className="whitespace-nowrap text-left text-muted-foreground">
-                                        {publisher.email}
-                                    </TableCell>
-                                    <TableCell className="whitespace-nowrap text-left text-muted-foreground">
-                                        {publisher.phone}
-                                    </TableCell>
-                                    <TableCell className="whitespace-nowrap text-left">
-                                        {publisher.created_at}
-                                    </TableCell>
-                                    <TableCell className="whitespace-nowrap text-center">
-                                        <div className="flex justify-center gap-x-2">
+                                    <TableCell>{book.category?.name}</TableCell>
+                                    <TableCell>{book.publisher?.name}</TableCell>
+                                    <TableCell>{book.created_at}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-x-2">
                                             <Button variant="green" size="sm" asChild>
                                                 <Link
-                                                    href={route('admin.publishers.edit', [publisher.id])}
+                                                    href={route('admin.books.edit', [book.id])}
                                                     className="flex items-center gap-1"
                                                 >
                                                     <IconPencil size="4" />
@@ -186,30 +235,26 @@ const Index = (props) => {
                                                 </AlertDialogTrigger>
                                                 <AlertDialogContent>
                                                     <AlertDialogHeader>
-                                                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                        <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Aksi ini tidak dapat dibatalkan. Data akan dihapus permanen
-                                                            dari server.
+                                                            Data akan dihapus secara permanen.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                         <AlertDialogCancel>Batal</AlertDialogCancel>
                                                         <AlertDialogAction
                                                             onClick={() =>
-                                                                router.delete(
-                                                                    route('admin.publishers.destroy', [publisher.id]),
-                                                                    {
-                                                                        preserveScroll: true,
-                                                                        preserveState: true,
-                                                                        onSuccess: (success) => {
-                                                                            const flash = flashMessage(success);
-                                                                            if (flash) toast[flash.type](flash.message);
-                                                                        },
+                                                                router.delete(route('admin.books.destroy', [book.id]), {
+                                                                    preserveScroll: true,
+                                                                    preserveState: true,
+                                                                    onSuccess: (success) => {
+                                                                        const flash = flashMessage(success);
+                                                                        if (flash) toast[flash.type](flash.message);
                                                                     },
-                                                                )
+                                                                })
                                                             }
                                                         >
-                                                            Lanjutkan
+                                                            Hapus
                                                         </AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
@@ -221,10 +266,11 @@ const Index = (props) => {
                         </TableBody>
                     </Table>
                 </CardContent>
+
                 <CardFooter className="flex w-full flex-col items-center justify-between border-t py-2 lg:flex-row">
                     <p className="font-sm mb-2 text-muted-foreground">
-                        menampilkan{''} <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
-                        {meta.total} kategori
+                        Menampilkan <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
+                        {meta.total} buku
                     </p>
                     <div className="overflow-x-auto">
                         {meta.has_pages && (
@@ -247,6 +293,6 @@ const Index = (props) => {
     );
 };
 
-Index.layout = (page) => <AppLayout children={page} title={page.props.page_setting.title} />;
+Index.layout = (page) => <AppLayout title={page.props.page_setting.title}>{page}</AppLayout>;
 
 export default Index;

@@ -1,4 +1,4 @@
-import AppLayout from "@/Layouts/AppLayout";
+import AppLayout from '@/Layouts/AppLayout';
 
 const Testing = () => {
     return <AppLayout>ini testing</AppLayout>;

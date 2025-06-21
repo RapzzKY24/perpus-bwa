@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('book_code')->unique();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('auhtor');
+            $table->string('author');
             $table->unsignedInteger('publication_year'); // karena nilai tidak boleh negatif
             $table->string('isbn');
             $table->string('language')->default(BookLanguage::INDONESIA->value);

@@ -1,21 +1,21 @@
-import HeaderTitle from "@/Components/HeaderTitle";
-import { Button } from "@/Components/ui/button";
-import { Card, CardContent } from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { Textarea } from "@/Components/ui/textarea";
-import AppLayout from "@/Layouts/AppLayout";
-import { flashMessage } from "@/lib/utils";
-import { Link, useForm } from "@inertiajs/react";
-import { IconArrowLeft, IconCategory2 } from "@tabler/icons-react";
-import React, { useRef } from "react";
-import { toast } from "sonner";
+import HeaderTitle from '@/Components/HeaderTitle';
+import { Button } from '@/Components/ui/button';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import AppLayout from '@/Layouts/AppLayout';
+import { flashMessage } from '@/lib/utils';
+import { Link, useForm } from '@inertiajs/react';
+import { IconArrowLeft, IconCategory2 } from '@tabler/icons-react';
+import { useRef } from 'react';
+import { toast } from 'sonner';
 
 const Edit = (props) => {
     const fileInputCover = useRef(null);
     const { data, setData, reset, post, processing, errors } = useForm({
-        name: props.category.name ?? "",
-        description: props.category.description ?? "",
+        name: props.category.name ?? '',
+        description: props.category.description ?? '',
         cover: null,
         _method: props.page_setting.method,
     });
@@ -40,15 +40,15 @@ const Edit = (props) => {
         fileInputCover.current.value = null;
     };
     return (
-        <div className="flex flex-col w-full pb-32">
-            <div className="flex flex-col items-center justify-between mb-8 gap-y-4 lg:flex-row lg:items-center">
+        <div className="flex w-full flex-col pb-32">
+            <div className="mb-8 flex flex-col items-center justify-between gap-y-4 lg:flex-row lg:items-center">
                 <HeaderTitle
                     title={props.page_setting.title}
                     subtitle={props.page_setting.subtitle}
                     icon={IconCategory2}
                 />
                 <Button variant="blue" size="lg" asChild>
-                    <Link href={route("admin.categories.index")}>
+                    <Link href={route('admin.categories.index')}>
                         <IconArrowLeft size="4" />
                         Kembali
                     </Link>
@@ -67,11 +67,9 @@ const Edit = (props) => {
                                 onChange={onHandleChange}
                                 value={data.name}
                             />
-                            {errors.name && (
-                                <InputError message={errors.name} />
-                            )}
+                            {errors.name && <InputError message={errors.name} />}
                         </div>
-                        <div className="grid w-full items-center mt-1 gap-1.5">
+                        <div className="mt-1 grid w-full items-center gap-1.5">
                             <Label htmlFor="description">Description</Label>
                             <Textarea
                                 name="description"
@@ -80,31 +78,22 @@ const Edit = (props) => {
                                 value={data.description}
                                 onChange={onHandleChange}
                             ></Textarea>
-                            {errors.description && (
-                                <InputError message={errors.description} />
-                            )}
+                            {errors.description && <InputError message={errors.description} />}
                         </div>
-                        <div className="grid w-full mt-1 items-center gap-1.5">
+                        <div className="mt-1 grid w-full items-center gap-1.5">
                             <Label htmlFor="cover">Cover</Label>
                             <Input
                                 name="cover"
                                 id="cover"
                                 type="file"
                                 onChange={
-                                    (e) => setData("cover", e.target.files[0]) //input file
+                                    (e) => setData('cover', e.target.files[0]) //input file
                                 }
                                 ref={fileInputCover}
                             />
-                            {errors.cover && (
-                                <InputError message={errors.cover} />
-                            )}
-                            <div className="flex justify-end gap-x-2 ">
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="lg"
-                                    onClick={onHandleReset}
-                                >
+                            {errors.cover && <InputError message={errors.cover} />}
+                            <div className="flex justify-end gap-x-2">
+                                <Button type="button" variant="ghost" size="lg" onClick={onHandleReset}>
                                     Reset
                                 </Button>
                                 <Button type="submit" variant="green" size="lg">
@@ -119,7 +108,5 @@ const Edit = (props) => {
     );
 };
 
-Edit.layout = (page) => (
-    <AppLayout children={page} title={page.props.page_setting.title} />
-);
+Edit.layout = (page) => <AppLayout children={page} title={page.props.page_setting.title} />;
 export default Edit;
