@@ -6,8 +6,10 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\FineController;
 use App\Http\Controllers\admin\FineSettingController;
 use App\Http\Controllers\admin\LoanController;
+use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\PublisherController;
 use App\Http\Controllers\admin\ReturnBookController;
+use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\UserController;
 use App\Models\Announcment;
 use Illuminate\Support\Facades\Route;
@@ -84,6 +86,24 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('announcements/edit/{announcement}','edit')->name('admin.announcements.edit');
         Route::put('announcements/edit/{announcement}','update')->name('admin.announcements.update');
         Route::delete('announcements/destroy/{announcement}','destroy')->name('admin.announcements.destroy');
+    });
+
+    Route::controller(RoleController::class)->group(function(){
+        Route::get('roles','index')->name('admin.roles.index');
+        Route::get('roles/create','create')->name('admin.roles.create');
+        Route::post('roles/create','store')->name('admin.roles.store');
+        Route::get('roles/edit/{role}','edit')->name('admin.roles.edit');
+        Route::put('roles/edit/{role}','update')->name('admin.roles.update');
+        Route::delete('roles/destroy/{role}','destroy')->name('admin.roles.destroy');
+    });
+
+    Route::controller(PermissionController::class)->group(function(){
+        Route::get('permissions','index')->name('admin.permissions.index');
+        Route::get('permissions/create','create')->name('admin.permissions.create');
+        Route::post('permissions/create','store')->name('admin.permissions.store');
+        Route::get('permissions/edit/{permission}','edit')->name('admin.permissions.edit');
+        Route::put('permissions/edit/{permission}','update')->name('admin.permissions.update');
+        Route::delete('permissions/destroy/{permission}','destroy')->name('admin.permissions.destroy');
     });
 
 });

@@ -7,6 +7,7 @@ use App\Models\Publisher;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,11 +19,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Payme Risky12',
-            'username'=>'Rapzzky12',
-            'email' => 'aulia123@example.com',
-            'password'=>'12345678'
-        ]);
+            'name' => $name ='Payme Risky1245',
+            'username'=>usernameGenerator($name),
+            'email' => 'aulia12345@example.com',
+        ])->assignRole(Role::create(['name'=>'operator']));
 
         // Publisher::factory()->count(10)->create();
 

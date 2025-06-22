@@ -75,8 +75,18 @@ const Sidebar = ({ url, auth }) => {
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Peran dan Izin
-                    <NavLink url="#" title="Peran" icon={IconCircleKey} />
-                    <NavLink url="#" title="Izin" icon={IconVersions} />
+                    <NavLink
+                        url={route('admin.roles.index')}
+                        active={url.startsWith('/admin/roles')}
+                        title="Peran"
+                        icon={IconCircleKey}
+                    />
+                    <NavLink
+                        url={route('admin.permissions.index')}
+                        active={url.startsWith('/admin/permissions')}
+                        title="Izin"
+                        icon={IconVersions}
+                    />
                     <NavLink url="#" title="Tetapkan Izin" icon={IconKeyframe} />
                     <NavLink url="#" title="Tetapkan Peran" icon={IconLayoutKanban} />
                     <NavLink url="#" title="Akses Rute" icon={IconRoute} />
