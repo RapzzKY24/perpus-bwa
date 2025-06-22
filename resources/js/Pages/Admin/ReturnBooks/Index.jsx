@@ -1,16 +1,4 @@
 import HeaderTitle from '@/Components/HeaderTitle';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/Components/ui/alert-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
@@ -19,15 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/Components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import { useFilter } from '@/Hooks/useFilter';
 import AppLayout from '@/Layouts/AppLayout';
-import { flashMessage } from '@/lib/utils';
-import { Link, router } from '@inertiajs/react';
+import { formatToRupiah } from '@/lib/utils';
+import { Link } from '@inertiajs/react';
 import { SelectValue } from '@radix-ui/react-select';
-import { IconArrowsDownUp, IconCategory, IconPencil, IconPlus, IconRefresh, IconTrash } from '@tabler/icons-react';
+import { IconArrowsDownUp, IconCreditCardRefund, IconEye, IconRefresh } from '@tabler/icons-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 const Index = (props) => {
-    const { data: categories, meta } = props.categories;
+    const { data: return_books, meta } = props.return_books;
     const [params, setParams] = useState(props.state);
     const onSortTable = (field) => {
         setParams({
@@ -37,9 +24,9 @@ const Index = (props) => {
         });
     };
     useFilter({
-        route: route('admin.categories.index'),
+        route: route('admin.return-books.index'),
         values: params,
-        only: ['categories'],
+        only: ['return_books'],
     });
     return (
         <div className="flex w-full flex-col pb-32">
@@ -47,14 +34,8 @@ const Index = (props) => {
                 <HeaderTitle
                     title={props.page_setting.title}
                     subtitle={props.page_setting.subtitle}
-                    icon={IconCategory}
+                    icon={IconCreditCardRefund}
                 />
-                <Button variant="blue" size="lg" asChild>
-                    <Link href={route('admin.categories.create')}>
-                        <IconPlus size="4" />
-                        Tambah
-                    </Link>
-                </Button>
             </div>
             <Card>
                 <CardHeader>
@@ -108,7 +89,31 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('name')}
+                                        onClick={() => onSortTable('return_book_code')}
+                                    >
+                                        Kode Pengembalian
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('loan_code')}
+                                    >
+                                        Kode Peminjaman
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('user_id')}
                                     >
                                         Nama
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
@@ -120,9 +125,9 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('slug')}
+                                        onClick={() => onSortTable('book_id')}
                                     >
-                                        Slug
+                                        Buku
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
                                             <IconArrowsDownUp className="size-4 text-muted-foreground" />
                                         </span>
@@ -132,92 +137,74 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('description')}
+                                        onClick={() => onSortTable('status')}
                                     >
-                                        Deskripsi
+                                        Status
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
                                             <IconArrowsDownUp className="size-4 text-muted-foreground" />
                                         </span>
                                     </Button>
                                 </TableHead>
-                                <TableHead>Cover</TableHead>
                                 <TableHead>
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('created_at')}
+                                        onClick={() => onSortTable('loan_date')}
                                     >
-                                        Dibuat pada
-                                        <span className="ml-2 flex-none rounded text-muted-foreground">
-                                            <IconArrowsDownUp className="size-10 text-muted-foreground" />
-                                        </span>
+                                        Tanggal Peminjaman
+                                        <span className="ml-2 flex-none rounded text-muted-foreground" />
                                     </Button>
                                 </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('due_date')}
+                                    >
+                                        Batas Pengembalian
+                                        <span className="ml-2 flex-none rounded text-muted-foreground" />
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('return_date')}
+                                    >
+                                        Tanggal Pengembalian
+                                        <span className="ml-2 flex-none rounded text-muted-foreground" />
+                                    </Button>
+                                </TableHead>
+                                <TableHead>Denda</TableHead>
+                                <TableHead>Kondisi</TableHead>
+                                <TableHead>Dibuat Pada</TableHead>
                                 <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {categories.map((category, indeks) => (
+                            {return_books.map((return_book, indeks) => (
                                 <TableRow key={indeks}>
                                     <TableCell>{indeks + 1 + (meta.current_page - 1) * meta.per_page}</TableCell>
-                                    <TableCell>{category.name}</TableCell>
-                                    <TableCell>{category.slug}</TableCell>
-                                    <TableCell>{category.description ? category.description : '-'}</TableCell>
+                                    <TableCell>{return_book.return_book_code}</TableCell>
+                                    <TableCell>{return_book.loan.loan_code}</TableCell>
+                                    <TableCell>{return_book.user.name}</TableCell>
+                                    <TableCell>{return_book.book.title}</TableCell>
+                                    <TableCell>{return_book.status}</TableCell>
+                                    <TableCell>{return_book.loan.loan_date}</TableCell>
+                                    <TableCell>{return_book.loan.due_date}</TableCell>
+                                    <TableCell>{return_book.return_date}</TableCell>
+                                    <TableCell className="text-red-500">{formatToRupiah(return_book.fine)}</TableCell>
+                                    <TableCell>{return_book.return_book_check ?? '-'}</TableCell>
+                                    <TableCell>{return_book.created_at}</TableCell>
                                     <TableCell>
-                                        <Avatar>
-                                            <AvatarImage src={category.cover} alt={category.nama} />
-                                            <AvatarFallback>{category.name.substring(0, 1)}</AvatarFallback>
-                                        </Avatar>
-                                    </TableCell>
-                                    <TableCell>{category.created_at}</TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-x-2">
-                                            <Button variant="green" size="sm" asChild>
-                                                <Link
-                                                    href={route('admin.categories.edit', [category.id])}
-                                                    className="flex items-center gap-1"
-                                                >
-                                                    <IconPencil size="4" />
-                                                    Edit
-                                                </Link>
-                                            </Button>
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button variant="red" size="sm">
-                                                        <IconTrash size="4" />
-                                                        Hapus
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>Apakah Anda Bener Yakin</AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            Tindakan tidak dapat dibatalkan,tindakan ini akan menghapus
-                                                            data permanen dan mengapus data dari server kami
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={() =>
-                                                                router.delete(
-                                                                    route('admin.categories.destroy', [category]),
-                                                                    {
-                                                                        preserveScroll: true,
-                                                                        preserveState: true,
-                                                                        onSuccess: (success) => {
-                                                                            const flash = flashMessage(success);
-                                                                            if (flash) toast[flash.type](flash.message);
-                                                                        },
-                                                                    },
-                                                                )
-                                                            }
-                                                        >
-                                                            Continue
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
+                                        <div className="flex items-center gap-x-1">
+                                            {return_book.fine && (
+                                                <Button variant="orange" sizi="sm" asChild>
+                                                    <Link href={route('admin.fine.create', [return_book])}>
+                                                        <IconEye className="size-4" />
+                                                    </Link>
+                                                </Button>
+                                            )}
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -227,8 +214,8 @@ const Index = (props) => {
                 </CardContent>
                 <CardFooter className="flex w-full flex-col items-center justify-between border-t py-2 lg:flex-row">
                     <p className="font-sm mb-2 text-muted-foreground">
-                        menampilkan{''} <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
-                        {meta.total} kategori
+                        menampilkan <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
+                        {meta.total} Pengembalian
                     </p>
                     <div className="overflow-x-auto">
                         {meta.has_pages && (
