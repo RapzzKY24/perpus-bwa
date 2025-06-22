@@ -11,6 +11,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/Components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
@@ -21,12 +22,12 @@ import { useFilter } from '@/Hooks/useFilter';
 import AppLayout from '@/Layouts/AppLayout';
 import { flashMessage } from '@/lib/utils';
 import { Link, router } from '@inertiajs/react';
-import { IconBooks, IconPencil, IconPlus, IconRefresh, IconTrash } from '@tabler/icons-react';
+import { IconPencil, IconPlus, IconRefresh, IconTrash, IconUsersGroup } from '@tabler/icons-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 const Index = (props) => {
-    const { data: books, meta } = props.books;
+    const { data: users, meta } = props.users;
     const [params, setParams] = useState(props.state);
 
     const onSortTable = (field) => {
@@ -38,17 +39,21 @@ const Index = (props) => {
     };
 
     useFilter({
-        route: route('admin.books.index'),
+        route: route('admin.users.index'),
         values: params,
-        only: ['books'],
+        only: ['users'],
     });
 
     return (
         <div className="flex w-full flex-col pb-32">
             <div className="mb-8 flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
-                <HeaderTitle title={props.page_setting.title} subtitle={props.page_setting.subtitle} icon={IconBooks} />
+                <HeaderTitle
+                    title={props.page_setting.title}
+                    subtitle={props.page_setting.subtitle}
+                    icon={IconUsersGroup}
+                />
                 <Button variant="blue" size="lg" asChild>
-                    <Link href={route('admin.books.create')}>
+                    <Link href={route('admin.users.create')}>
                         <IconPlus size="4" />
                         Tambah
                     </Link>
@@ -60,7 +65,7 @@ const Index = (props) => {
                     <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center">
                         <Input
                             className="w-full sm:w-1/4"
-                            placeholder="Cari buku..."
+                            placeholder="Cari Pengguna..."
                             value={params?.search}
                             onChange={(e) =>
                                 setParams((prev) => ({
@@ -101,8 +106,8 @@ const Index = (props) => {
                                 </TableHead>
                                 <TableHead>
                                     <SortableHeader
-                                        label="Judul"
-                                        field="title"
+                                        label="Nama"
+                                        field="name"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
@@ -110,8 +115,24 @@ const Index = (props) => {
                                 </TableHead>
                                 <TableHead>
                                     <SortableHeader
-                                        label="Kode Buku"
-                                        field="book_code"
+                                        label="Username"
+                                        field="username"
+                                        currentField={params.field}
+                                        direction={params.direction}
+                                        onSort={onSortTable}
+                                    />
+                                </TableHead>
+                                <SortableHeader
+                                    label="Email"
+                                    field="email"
+                                    currentField={params.field}
+                                    direction={params.direction}
+                                    onSort={onSortTable}
+                                />
+                                <TableHead>
+                                    <SortableHeader
+                                        label="Tanggal Lahir"
+                                        field="date_of_birth"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
@@ -119,8 +140,8 @@ const Index = (props) => {
                                 </TableHead>
                                 <TableHead>
                                     <SortableHeader
-                                        label="Penulis"
-                                        field="author"
+                                        label="Jenis Kelamain"
+                                        field="gender"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
@@ -128,8 +149,8 @@ const Index = (props) => {
                                 </TableHead>
                                 <TableHead>
                                     <SortableHeader
-                                        label="ISBN"
-                                        field="isbn"
+                                        label="Nomor Handphone"
+                                        field="phone"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
@@ -137,52 +158,14 @@ const Index = (props) => {
                                 </TableHead>
                                 <TableHead>
                                     <SortableHeader
-                                        label="Bahasa"
-                                        field="language"
+                                        label="Alamat"
+                                        field="address"
                                         currentField={params.field}
                                         direction={params.direction}
                                         onSort={onSortTable}
                                     />
                                 </TableHead>
-                                <TableHead>Tahun</TableHead>
-                                <TableHead>
-                                    <SortableHeader
-                                        label="Harga"
-                                        field="price"
-                                        currentField={params.field}
-                                        direction={params.direction}
-                                        onSort={onSortTable}
-                                    />
-                                </TableHead>
-                                <TableHead>
-                                    <SortableHeader
-                                        label="Jumlah Halaman"
-                                        field="number_of_page"
-                                        currentField={params.field}
-                                        direction={params.direction}
-                                        onSort={onSortTable}
-                                    />
-                                </TableHead>
-                                <TableHead>Stok</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>
-                                    <SortableHeader
-                                        label="Kategori"
-                                        field="category_id"
-                                        currentField={params.field}
-                                        direction={params.direction}
-                                        onSort={onSortTable}
-                                    />
-                                </TableHead>
-                                <TableHead>
-                                    <SortableHeader
-                                        label="Penerbit"
-                                        field="publisher_id"
-                                        currentField={params.field}
-                                        direction={params.direction}
-                                        onSort={onSortTable}
-                                    />
-                                </TableHead>
+                                <TableHead>Cover</TableHead>
                                 <TableHead>
                                     <SortableHeader
                                         label="Dibuat Pada"
@@ -196,37 +179,28 @@ const Index = (props) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {books.map((book, index) => (
+                            {users.map((user, index) => (
                                 <TableRow key={index} className="w-[140px] whitespace-nowrap text-center text-sm">
                                     <TableCell>{index + 1 + (meta.current_page - 1) * meta.per_page}</TableCell>
-                                    <TableCell>{book.title}</TableCell>
-                                    <TableCell>{book.book_code}</TableCell>
-                                    <TableCell>{book.author}</TableCell>
-                                    <TableCell>{book.isbn}</TableCell>
-                                    <TableCell>{book.language}</TableCell>
-                                    <TableCell>{book.publication_year}</TableCell>
-                                    <TableCell>Rp{book.price}</TableCell>
-                                    <TableCell>{book.number_of_pages}</TableCell>
-                                    <TableCell>{book.stock?.total ?? 0}</TableCell>
+                                    <TableCell>{user.name}</TableCell>
+                                    <TableCell>{user.username}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{user.date_of_birth}</TableCell>
+                                    <TableCell>{user.gender}</TableCell>
+                                    <TableCell>{user.phone}</TableCell>
+                                    <TableCell>{user.address}</TableCell>
                                     <TableCell>
-                                        <span
-                                            className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                                                book.stock?.total > 0
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-red-100 text-red-800'
-                                            }`}
-                                        >
-                                            {book.stock?.total > 0 ? 'Tersedia' : 'Kosong'}
-                                        </span>
+                                        <Avatar>
+                                            <AvatarImage src={user.cover} alt={user.name} />
+                                            <AvatarFallback>{user.name.substring(0, 1)}</AvatarFallback>
+                                        </Avatar>
                                     </TableCell>
-                                    <TableCell>{book.category?.name}</TableCell>
-                                    <TableCell>{book.publisher?.name}</TableCell>
-                                    <TableCell>{book.created_at}</TableCell>
+                                    <TableCell>{user.created_at}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-x-2">
                                             <Button variant="green" size="sm" asChild>
                                                 <Link
-                                                    href={route('admin.books.edit', [book.id])}
+                                                    href={route('admin.users.edit', [user.id])}
                                                     className="flex items-center gap-1"
                                                 >
                                                     <IconPencil size="4" />
@@ -251,7 +225,7 @@ const Index = (props) => {
                                                         <AlertDialogCancel>Batal</AlertDialogCancel>
                                                         <AlertDialogAction
                                                             onClick={() =>
-                                                                router.delete(route('admin.books.destroy', [book.id]), {
+                                                                router.delete(route('admin.users.destroy', [user.id]), {
                                                                     preserveScroll: true,
                                                                     preserveState: true,
                                                                     onSuccess: (success) => {
@@ -277,7 +251,7 @@ const Index = (props) => {
                 <CardFooter className="flex w-full flex-col items-center justify-between border-t py-2 lg:flex-row">
                     <p className="font-sm mb-2 text-muted-foreground">
                         Menampilkan <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
-                        {meta.total} buku
+                        {meta.total} Pengguna
                     </p>
                     <div className="overflow-x-auto">
                         {meta.has_pages && (

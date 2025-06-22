@@ -61,9 +61,9 @@ class Book extends Model
         return $this->belongsTo(Publisher::class);
     }
 
-    public function scopeFilter(Builder $query,array $request):void
+    public function scopeFilter(Builder $query,array $filters):void
     {
-        $query->when($request['search']?? null,function($query,$search){
+        $query->when($filters['search']?? null,function($query,$search){
             $query->where(function($query)use($search){
                 $query->whereAny([
                     'book_code',
@@ -87,5 +87,31 @@ class Book extends Model
         });
     }
 
+    public function update_stock($coloumToDecrement,$coloumToIncrement)
+    {
+        if($this->stock->$coloumToDecrement>0){
+            return $this->stock()->update([
+                $coloumToDecrement => $this->stock->$coloumToDecrement-1,
+                $coloumToIncrement => $this->stock->$coloumToIncrement+1
+            ]);
+        }
+        return false;
+    }
+
+    public function stock_loan(){
+        return $this->update_stock('available','loan');
+    }
+
+    public function stock_lost(){
+        return $this->update_stock('loan','lost');
+    }
+
+    public function stock_damage(){
+        return $this->update_stock('loan','damaged');
+    }
+
+    public function stock_loan_return(){
+        return $this->update_stock('loan','available');
+    }
 
 }

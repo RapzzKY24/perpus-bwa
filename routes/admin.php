@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\admin\BookController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\FineSettingController;
+use App\Http\Controllers\admin\LoanController;
 use App\Http\Controllers\admin\PublisherController;
+use App\Http\Controllers\admin\ReturnBookController;
+use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -34,6 +38,38 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::delete('books/destroy/{book}','destroy')->name('admin.books.destroy');
     });
 
+
+    Route::controller(UserController::class)->group(function(){
+        Route::get('users','index')->name('admin.users.index');
+        Route::get('users/create','create')->name('admin.users.create');
+        Route::post('users/create','store')->name('admin.users.store');
+        Route::get('users/edit/{user}','edit')->name('admin.users.edit');
+        Route::put('users/edit/{user}','update')->name('admin.users.update');
+        Route::delete('users/destroy/{user}','destroy')->name('admin.users.destroy');
+    });
+
+    Route::controller(FineSettingController::class)->group(function(){
+        Route::get('fine-settings/create','create')->name('admin.fine-settings.create');
+        Route::put('fine-settings/create','store')->name('admin.fine-settings.store');
+
+    });
+
+    Route::controller(LoanController::class)->group(function(){
+        Route::get('loans','index')->name('admin.loans.index');
+        Route::get('loans/create','create')->name('admin.loans.create');
+        Route::post('loans/create','store')->name('admin.loans.store');
+        Route::get('loans/edit/{loan}','edit')->name('admin.loans.edit');
+        Route::put('loans/edit/{loan}','update')->name('admin.loans.update');
+        Route::delete('loans/destroy/{loan}','destroy')->name('admin.loans.destroy');
+    });
+
+    Route::controller(ReturnBookController::class)->group(function(){
+        Route::get('return-books','index')->name('admin.return-books.index');
+        Route::get('return-books/{loan:loan_code}/create','create')->name('admin.return-books.create');
+        Route::put('return-books/{loan:loan_code}/create','store')->name('admin.return-books.store');
+        Route::put('return-books/{returnBook:return_book_code}/approve','approve')->name('admin.return-books.approve');
+
+    });
 
 });
 

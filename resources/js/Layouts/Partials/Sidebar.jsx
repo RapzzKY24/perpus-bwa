@@ -61,8 +61,18 @@ const Sidebar = ({ url, auth }) => {
                         title="Buku"
                         icon={IconBook}
                     />
-                    <NavLink url="#" title="Pengguna" icon={IconUsersGroup} />
-                    <NavLink url="#" title="Pengaturan Denda" icon={IconSettingsExclamation} />
+                    <NavLink
+                        url={route('admin.users.index')}
+                        active={url.startsWith('/admin/users')}
+                        title="Pengguna"
+                        icon={IconUsersGroup}
+                    />
+                    <NavLink
+                        url={route('admin.fine-settings.create')}
+                        active={url.startsWith('/admin/fine-settings')}
+                        title="Pengaturan Denda"
+                        icon={IconSettingsExclamation}
+                    />
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Peran dan Izin
@@ -74,7 +84,12 @@ const Sidebar = ({ url, auth }) => {
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Transaksi
-                    <NavLink url="#" title="Peminjaman" icon={IconCreditCardPay} />
+                    <NavLink
+                        url={route('admin.loans.index')}
+                        active={url.startsWith('/admin/loans')}
+                        title="Peminjaman"
+                        icon={IconCreditCardPay}
+                    />
                     <NavLink url="#" title="Pengembalian" icon={IconCreditCardRefund} />
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
