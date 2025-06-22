@@ -1,4 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import Banner from '@/Components/Banner';
 import { Avatar, AvatarFallback } from '@/Components/ui/avatar';
 import { Button } from '@/Components/ui/button';
 import {
@@ -16,8 +17,9 @@ import Sidebar from './Partials/Sidebar';
 
 export default function AppLayout({ title, children }) {
     const auth = usePage().props.auth.user;
-    console.log(auth);
     const { url } = usePage();
+    const announcement = usePage().props.announcement;
+    console.log(announcement);
     return (
         <>
             <Head title={title} />
@@ -61,7 +63,12 @@ export default function AppLayout({ title, children }) {
                     </header>
                     <main className="w-full">
                         <div className="relative">
-                            <div className="gap-4 p-4 lg:gap-6">{children}</div>
+                            <div className="gap-4 p-4 lg:gap-6">
+                                {children}
+                                {announcement && announcement.is_active == 1 && (
+                                    <Banner message={announcement.message} url={announcement.url} />
+                                )}
+                            </div>
                             <div
                                 className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
                                 aria-hidden="true"

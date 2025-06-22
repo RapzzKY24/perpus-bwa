@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 
 const Index = (props) => {
     const { data: announcements, meta } = props.announcements;
-    console.log(announcements);
+
     return (
         <div className="flex w-full flex-col pb-32">
             <div className="mb-8 flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
