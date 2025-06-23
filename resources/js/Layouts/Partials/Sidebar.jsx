@@ -87,7 +87,12 @@ const Sidebar = ({ url, auth }) => {
                         title="Izin"
                         icon={IconVersions}
                     />
-                    <NavLink url="#" title="Tetapkan Izin" icon={IconKeyframe} />
+                    <NavLink
+                        url={route('admin.assignement-permissions.index')}
+                        active={url.startsWith('/admin/assignement-permissions')}
+                        title="Tetapkan Izin"
+                        icon={IconKeyframe}
+                    />
                     <NavLink url="#" title="Tetapkan Peran" icon={IconLayoutKanban} />
                     <NavLink url="#" title="Akses Rute" icon={IconRoute} />
                 </div>
