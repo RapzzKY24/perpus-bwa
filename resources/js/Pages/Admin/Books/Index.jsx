@@ -86,7 +86,7 @@ const Index = (props) => {
                         </Button>
                     </div>
                 </CardHeader>
-                <CardContent className="px-0 py-0 [&-td]:whitespace-nowrap [&_td]:px-6 [&_th]:px-6">
+                <CardContent className="px-0 py-0 [&_td]:whitespace-nowrap [&_td]:px-6 [&_th]:px-6">
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>

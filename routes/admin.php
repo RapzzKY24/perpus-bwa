@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\PublisherController;
 use App\Http\Controllers\admin\ReturnBookController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\routeAccessController;
+use App\Http\Controllers\admin\stockBookController;
 use App\Http\Controllers\admin\UserController;
 use App\Models\Announcment;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::controller(FineReportController::class)->group(function(){
         Route::get('fine-reports','index')->name('admin.fine-reports.index');
+    });
+
+    Route::controller(stockBookController::class)->group(function(){
+        Route::get('stock-book-reports','index')->name('admin.stock-book-reports.index');
+        Route::get('stock-book-reports/edit/{stock}','edit')->name('admin.stock-book-reports.edit');
+        Route::put('stock-book-reports/edit/{stock}','update')->name('admin.stock-book-reports.update');
     });
 
     Route::controller(CategoryController::class)->group(function(){
@@ -90,7 +97,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     });
 
     Route::controller(FineController::class)->group(function(){
-        Route::get('fines/{returnBook:return_book_code}/create','create')->name('admin.fine.create');
+        Route::get('fines/{returnBook:return_book_code}/create','create')->name('admin.fines.create');
     });
 
     Route::controller(AnnouncementController::class)->group(function(){

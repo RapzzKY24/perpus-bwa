@@ -69,7 +69,7 @@ const Index = (props) => {
                         </Button>
                     </div>
                 </CardHeader>
-                <CardContent className="px-0 py-0 [&-td]:whitespace-nowrap [&_td]:px-6 [&_th]:px-6">
+                <CardContent className="px-0 py-0 [&_td]:whitespace-nowrap [&_td]:px-6 [&_th]:px-6">
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
@@ -200,7 +200,7 @@ const Index = (props) => {
                                         <div className="flex items-center gap-x-1">
                                             {return_book.fine && (
                                                 <Button variant="orange" sizi="sm" asChild>
-                                                    <Link href={route('admin.fine.create', [return_book])}>
+                                                    <Link href={route('admin.fines.create', [return_book])}>
                                                         <IconEye className="size-4" />
                                                     </Link>
                                                 </Button>

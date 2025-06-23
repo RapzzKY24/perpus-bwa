@@ -48,7 +48,12 @@ const Sidebar = ({ url, auth }) => {
                         title=" Laporan Denda"
                         icon={IconMoneybag}
                     />
-                    <NavLink url="#" title="Laporan Stok Buku" icon={IconStack3} />
+                    <NavLink
+                        url={route('admin.stock-book-reports.index')}
+                        active={url.startsWith('/admin/stock-book-reports')}
+                        title="Laporan Stok Buku"
+                        icon={IconStack3}
+                    />
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Master
