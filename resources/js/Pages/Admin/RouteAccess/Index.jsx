@@ -40,7 +40,7 @@ const Index = (props) => {
     useFilter({
         route: route('admin.route-accesses.index'),
         values: params,
-        only: ['route_accesses'],
+        only: ['route-accesses'],
     });
     return (
         <div className="flex w-full flex-col pb-32">

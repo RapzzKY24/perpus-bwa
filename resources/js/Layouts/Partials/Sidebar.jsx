@@ -22,9 +22,14 @@ import {
 import NavLink from '@/Components/NavLink';
 
 const Sidebar = ({ url, auth }) => {
+    const roles = auth?.role?.map((r) => r.toLowerCase()) ?? [];
+
+    const hasAnyRole = (...allowedRoles) => roles.some((role) => allowedRoles.includes(role));
+
     return (
-        <>
-            <nav className="grid items-start px-2 text-sm font-semibold lg:px-4">
+        <nav className="grid items-start px-2 text-sm font-semibold lg:px-4">
+            {/* Dashboard (Admin, Operator, Member) */}
+            {hasAnyRole('admin', 'operator', 'member') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Dashboard
                     <NavLink
@@ -34,18 +39,22 @@ const Sidebar = ({ url, auth }) => {
                         active={url.startsWith('/dashboard')}
                     />
                 </div>
+            )}
+
+            {/* Statistik (Admin only) */}
+            {hasAnyRole('admin') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Statistik
                     <NavLink
                         url={route('admin.loan-statistics.index')}
                         active={url.startsWith('/admin/loan-statistics')}
-                        title="Statistik Peminjan"
+                        title="Statistik Peminjaman"
                         icon={IconChartDots2}
                     />
                     <NavLink
                         url={route('admin.fine-reports.index')}
                         active={url.startsWith('/admin/fine-reports')}
-                        title=" Laporan Denda"
+                        title="Laporan Denda"
                         icon={IconMoneybag}
                     />
                     <NavLink
@@ -55,6 +64,10 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconStack3}
                     />
                 </div>
+            )}
+
+            {/* Master Data (Admin only) */}
+            {hasAnyRole('admin', 'operator') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Master
                     <NavLink
@@ -88,6 +101,10 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconSettingsExclamation}
                     />
                 </div>
+            )}
+
+            {/* Roles & Permissions (Admin only) */}
+            {hasAnyRole('admin') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Peran dan Izin
                     <NavLink
@@ -121,6 +138,10 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconRoute}
                     />
                 </div>
+            )}
+
+            {/* Transaksi (Admin & Operator) */}
+            {hasAnyRole('admin', 'operator') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Transaksi
                     <NavLink
@@ -136,14 +157,20 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconCreditCardRefund}
                     />
                 </div>
+            )}
+
+            {/* Lainnya (semua role) */}
+            {hasAnyRole('admin', 'operator', 'member') && (
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Lainnya
-                    <NavLink
-                        url={route('admin.announcements.index')}
-                        active={url.startsWith('/admin/announcements')}
-                        title="Pengumuman"
-                        icon={IconAlertCircle}
-                    />
+                    {hasAnyRole('admin') && (
+                        <NavLink
+                            url={route('admin.announcements.index')}
+                            active={url.startsWith('/admin/announcements')}
+                            title="Pengumuman"
+                            icon={IconAlertCircle}
+                        />
+                    )}
                     <NavLink
                         url={route('profile.edit')}
                         active={url.startsWith('/admin/profile')}
@@ -151,8 +178,8 @@ const Sidebar = ({ url, auth }) => {
                         icon={IconUser}
                     />
                 </div>
-            </nav>
-        </>
+            )}
+        </nav>
     );
 };
 

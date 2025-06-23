@@ -13,7 +13,7 @@ class FineController extends Controller
     //
     public function create(ReturnBook $returnBook):Response
     {
-        return inertia('Admin/Fine/Create',[
+        return inertia('Admin/Fines/Create',[
             'page_setting' =>[
                 'title' => 'Denda',
                 'subtitle' => 'Selesaikan Pembayaran Denda Terlebih Dahulu'

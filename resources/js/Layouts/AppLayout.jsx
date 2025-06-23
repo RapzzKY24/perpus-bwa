@@ -17,6 +17,7 @@ import Sidebar from './Partials/Sidebar';
 
 export default function AppLayout({ title, children }) {
     const auth = usePage().props.auth.user;
+    console.log(auth);
     const { url } = usePage();
     const announcement = usePage().props.announcement;
 
