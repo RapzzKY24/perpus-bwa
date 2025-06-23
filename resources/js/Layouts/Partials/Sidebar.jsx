@@ -36,8 +36,18 @@ const Sidebar = ({ url, auth }) => {
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Statistik
-                    <NavLink url="#" title="Statistik Peminjan" icon={IconChartDots2} />
-                    <NavLink url="#" title=" Laporan Denda" icon={IconMoneybag} />
+                    <NavLink
+                        url={route('admin.loan-statistics.index')}
+                        active={url.startsWith('/admin/loan-statistics')}
+                        title="Statistik Peminjan"
+                        icon={IconChartDots2}
+                    />
+                    <NavLink
+                        url={route('admin.fine-reports.index')}
+                        active={url.startsWith('/admin/fine-reports')}
+                        title=" Laporan Denda"
+                        icon={IconMoneybag}
+                    />
                     <NavLink url="#" title="Laporan Stok Buku" icon={IconStack3} />
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
@@ -93,8 +103,18 @@ const Sidebar = ({ url, auth }) => {
                         title="Tetapkan Izin"
                         icon={IconKeyframe}
                     />
-                    <NavLink url="#" title="Tetapkan Peran" icon={IconLayoutKanban} />
-                    <NavLink url="#" title="Akses Rute" icon={IconRoute} />
+                    <NavLink
+                        url={route('admin.assign-users.index')}
+                        active={url.startsWith('/admin/assign-users')}
+                        title="Tetapkan Peran"
+                        icon={IconLayoutKanban}
+                    />
+                    <NavLink
+                        url={route('admin.route-accesses.index')}
+                        active={url.startsWith('/admin/route-accesses')}
+                        title="Akses Rute"
+                        icon={IconRoute}
+                    />
                 </div>
                 <div className="px-3 py-2 text-sm font-semibold text-foreground">
                     Transaksi

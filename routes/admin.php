@@ -3,20 +3,32 @@
 use App\Http\Controllers\admin\AnnouncementController;
 use App\Http\Controllers\admin\AssignementPermissionController;
 use App\Http\Controllers\admin\AssignmentPermissionController;
+use App\Http\Controllers\admin\AssignUserController;
 use App\Http\Controllers\admin\BookController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\FineController;
+use App\Http\Controllers\admin\FineReportController;
 use App\Http\Controllers\admin\FineSettingController;
 use App\Http\Controllers\admin\LoanController;
+use App\Http\Controllers\admin\loanStatisticsController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\PublisherController;
 use App\Http\Controllers\admin\ReturnBookController;
 use App\Http\Controllers\admin\RoleController;
+use App\Http\Controllers\admin\routeAccessController;
 use App\Http\Controllers\admin\UserController;
 use App\Models\Announcment;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
+
+    Route::controller(loanStatisticsController::class)->group(function(){
+        Route::get('loan-statistics','index')->name('admin.loan-statistics.index');
+    });
+
+    Route::controller(FineReportController::class)->group(function(){
+        Route::get('fine-reports','index')->name('admin.fine-reports.index');
+    });
 
     Route::controller(CategoryController::class)->group(function(){
         Route::get('categories','index')->name('admin.categories.index');
@@ -113,6 +125,21 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('assignement-permissions/edit/{role}','edit')->name('admin.assignement-permissions.edit');
         Route::put('assignement-permissions/edit/{role}','update')->name('admin.assignement-permissions.update');
 
+    });
+
+    Route::controller(AssignUserController::class)->group(function(){
+        Route::get('assign-users','index')->name('admin.assign-users.index');
+        Route::get('assign-users/edit/{user}','edit')->name('admin.assign-users.edit');
+        Route::put('assign-users/edit/{user}','update')->name('admin.assign-users.update');
+    });
+
+    Route::controller(routeAccessController::class)->group(function(){
+        Route::get('route-accesses','index')->name('admin.route-accesses.index');
+        Route::get('route-accesses/create','create')->name('admin.route-accesses.create');
+        Route::post('route-accesses/create','store')->name('admin.route-accesses.store');
+        Route::get('route-accesses/edit/{routeAccess}','edit')->name('admin.route-accesses.edit');
+        Route::put('route-accesses/edit/{routeAccess}','update')->name('admin.route-accesses.update');
+        Route::delete('route-accesses/destroy/{routeAccess}','destroy')->name('admin.permissionroute-accesses.destroy');
     });
 
 });

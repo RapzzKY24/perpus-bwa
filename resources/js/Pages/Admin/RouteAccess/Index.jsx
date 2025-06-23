@@ -1,5 +1,15 @@
 import HeaderTitle from '@/Components/HeaderTitle';
-import { Badge } from '@/Components/ui/badge';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/Components/ui/alert-dialog';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
@@ -8,13 +18,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/Components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import { useFilter } from '@/Hooks/useFilter';
 import AppLayout from '@/Layouts/AppLayout';
-import { Link } from '@inertiajs/react';
+import { flashMessage } from '@/lib/utils';
+import { Link, router } from '@inertiajs/react';
 import { SelectValue } from '@radix-ui/react-select';
-import { IconArrowsDownUp, IconCircleKey, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { IconArrowsDownUp, IconPencil, IconPlus, IconRefresh, IconRoute, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const Index = (props) => {
-    const { data: roles, meta } = props.roles;
+    const { data: route_accesses, meta } = props.route_accesses;
+    console.log(route_accesses);
+    console.log(route_accesses);
     const [params, setParams] = useState(props.state);
     const onSortTable = (field) => {
         setParams({
@@ -24,20 +38,16 @@ const Index = (props) => {
         });
     };
     useFilter({
-        route: route('admin.assignement-permissions.index'),
+        route: route('admin.route-accesses.index'),
         values: params,
-        only: ['assignement-permissions'],
+        only: ['route_accesses'],
     });
     return (
         <div className="flex w-full flex-col pb-32">
             <div className="mb-8 flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
-                <HeaderTitle
-                    title={props.page_setting.title}
-                    subtitle={props.page_setting.subtitle}
-                    icon={IconCircleKey}
-                />
+                <HeaderTitle title={props.page_setting.title} subtitle={props.page_setting.subtitle} icon={IconRoute} />
                 <Button variant="blue" size="lg" asChild>
-                    <Link href={route('admin.permissions.create')}>
+                    <Link href={route('admin.route-accesses.create')}>
                         <IconPlus size="4" />
                         Tambah
                     </Link>
@@ -95,43 +105,111 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('name')}
+                                        onClick={() => onSortTable('route_name')}
                                     >
-                                        Nama
+                                        Rute
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
                                             <IconArrowsDownUp className="size-4 text-muted-foreground" />
                                         </span>
                                     </Button>
                                 </TableHead>
-                                <TableHead>Permissions</TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('role_id')}
+                                    >
+                                        Peran
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('permission_id')}
+                                    >
+                                        Izin
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('created_at')}
+                                    >
+                                        Dibuat pada
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-10 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
                                 <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {roles.map((role, indeks) => (
+                            {route_accesses.map((route_access, indeks) => (
                                 <TableRow key={indeks}>
                                     <TableCell>{indeks + 1 + (meta.current_page - 1) * meta.per_page}</TableCell>
-                                    <TableCell>{role.name}</TableCell>
-                                    <TableCell>
-                                        {role.permissions?.map((permission, index) => (
-                                            <span className="w-auto text-wrap" key={index}>
-                                                <Badge variant="outline" className="my-0.5 mr-2">
-                                                    {permission}
-                                                </Badge>
-                                            </span>
-                                        ))}
-                                    </TableCell>
-                                    <TableCell>{role.created_at}</TableCell>
+                                    <TableCell>{route_access.route_name}</TableCell>
+                                    <TableCell>{route_access.role?.name}</TableCell>
+                                    <TableCell>{route_access.permission?.name}</TableCell>
+                                    <TableCell>{route_access.created_at}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-x-2">
                                             <Button variant="green" size="sm" asChild>
                                                 <Link
-                                                    href={route('admin.assignement-permissions.edit', [role.id])}
+                                                    href={route('admin.route-accesses.edit', [route_access.id])}
                                                     className="flex items-center gap-1"
                                                 >
-                                                    <IconRefresh size="4" />
+                                                    <IconPencil size="4" />
+                                                    Edit
                                                 </Link>
                                             </Button>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="red" size="sm">
+                                                        <IconTrash size="4" />
+                                                        Hapus
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Apakah Anda Bener Yakin</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Tindakan tidak dapat dibatalkan,tindakan ini akan menghapus
+                                                            data permanen dan mengapus data dari server kami
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                router.delete(
+                                                                    route('admin.permissionroute-accesses.destroy', [
+                                                                        route_access,
+                                                                    ]),
+                                                                    {
+                                                                        preserveScroll: true,
+                                                                        preserveState: true,
+                                                                        onSuccess: (success) => {
+                                                                            const flash = flashMessage(success);
+                                                                            if (flash) toast[flash.type](flash.message);
+                                                                        },
+                                                                    },
+                                                                )
+                                                            }
+                                                        >
+                                                            Continue
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -142,7 +220,7 @@ const Index = (props) => {
                 <CardFooter className="flex w-full flex-col items-center justify-between border-t py-2 lg:flex-row">
                     <p className="font-sm mb-2 text-muted-foreground">
                         menampilkan{''} <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
-                        {meta.total} Tetapkan Izin
+                        {meta.total} Rute Akses
                     </p>
                     <div className="overflow-x-auto">
                         {meta.has_pages && (

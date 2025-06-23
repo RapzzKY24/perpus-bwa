@@ -10,11 +10,11 @@ import { useFilter } from '@/Hooks/useFilter';
 import AppLayout from '@/Layouts/AppLayout';
 import { Link } from '@inertiajs/react';
 import { SelectValue } from '@radix-ui/react-select';
-import { IconArrowsDownUp, IconCircleKey, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { IconArrowsDownUp, IconLayoutKanban, IconPlus, IconRefresh } from '@tabler/icons-react';
 import { useState } from 'react';
 
 const Index = (props) => {
-    const { data: roles, meta } = props.roles;
+    const { data: users, meta } = props.users;
     const [params, setParams] = useState(props.state);
     const onSortTable = (field) => {
         setParams({
@@ -24,9 +24,9 @@ const Index = (props) => {
         });
     };
     useFilter({
-        route: route('admin.assignement-permissions.index'),
+        route: route('admin.assign-users.index'),
         values: params,
-        only: ['assignement-permissions'],
+        only: ['assign-users'],
     });
     return (
         <div className="flex w-full flex-col pb-32">
@@ -34,10 +34,10 @@ const Index = (props) => {
                 <HeaderTitle
                     title={props.page_setting.title}
                     subtitle={props.page_setting.subtitle}
-                    icon={IconCircleKey}
+                    icon={IconLayoutKanban}
                 />
                 <Button variant="blue" size="lg" asChild>
-                    <Link href={route('admin.permissions.create')}>
+                    <Link href={route('admin.roles.create')}>
                         <IconPlus size="4" />
                         Tambah
                     </Link>
@@ -48,7 +48,7 @@ const Index = (props) => {
                     <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center">
                         <Input
                             className="w-full sm:w-1/4"
-                            placeholder="cari kategori..."
+                            placeholder="cari pengguna..."
                             value={params?.search}
                             onChange={(e) =>
                                 setParams((prev) => ({
@@ -95,38 +95,50 @@ const Index = (props) => {
                                     <Button
                                         variant="ghost"
                                         className="group inline-flex"
-                                        onClick={() => onSortTable('name')}
+                                        onClick={() => onSortTable('username')}
                                     >
-                                        Nama
+                                        Username
                                         <span className="ml-2 flex-none rounded text-muted-foreground">
                                             <IconArrowsDownUp className="size-4 text-muted-foreground" />
                                         </span>
                                     </Button>
                                 </TableHead>
-                                <TableHead>Permissions</TableHead>
+                                <TableHead>
+                                    <Button
+                                        variant="ghost"
+                                        className="group inline-flex"
+                                        onClick={() => onSortTable('email')}
+                                    >
+                                        Email
+                                        <span className="ml-2 flex-none rounded text-muted-foreground">
+                                            <IconArrowsDownUp className="size-4 text-muted-foreground" />
+                                        </span>
+                                    </Button>
+                                </TableHead>
+                                <TableHead>Peran</TableHead>
                                 <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {roles.map((role, indeks) => (
+                            {users.map((user, indeks) => (
                                 <TableRow key={indeks}>
                                     <TableCell>{indeks + 1 + (meta.current_page - 1) * meta.per_page}</TableCell>
-                                    <TableCell>{role.name}</TableCell>
+                                    <TableCell>{user.username}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
                                     <TableCell>
-                                        {role.permissions?.map((permission, index) => (
+                                        {user.roles?.map((role, index) => (
                                             <span className="w-auto text-wrap" key={index}>
                                                 <Badge variant="outline" className="my-0.5 mr-2">
-                                                    {permission}
+                                                    {role}
                                                 </Badge>
                                             </span>
                                         ))}
                                     </TableCell>
-                                    <TableCell>{role.created_at}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-x-2">
                                             <Button variant="green" size="sm" asChild>
                                                 <Link
-                                                    href={route('admin.assignement-permissions.edit', [role.id])}
+                                                    href={route('admin.assign-users.edit', [user.id])}
                                                     className="flex items-center gap-1"
                                                 >
                                                     <IconRefresh size="4" />
@@ -142,7 +154,7 @@ const Index = (props) => {
                 <CardFooter className="flex w-full flex-col items-center justify-between border-t py-2 lg:flex-row">
                     <p className="font-sm mb-2 text-muted-foreground">
                         menampilkan{''} <span className="font-medium text-indigo-500">{meta.from ?? 0}</span> dari{' '}
-                        {meta.total} Tetapkan Izin
+                        {meta.total} Tetapkan Peran
                     </p>
                     <div className="overflow-x-auto">
                         {meta.has_pages && (
