@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\BookFrontController;
 use App\Http\Controllers\admin\CategoryFrontController;
 use App\Http\Controllers\admin\loanFrontController;
+use App\Http\Controllers\admin\ReturnBookFrontController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +48,12 @@ Route::controller(loanFrontController::class)->middleware(['auth','verified','ro
     Route::get('loans','index')->name('front.loans.index');
     Route::get('loans/{loan:loan_code}/detail','show')->name('front.loans.show');
     Route::post('loans/{book:slug}/create','store')->name('front.loans.store');
+});
+
+Route::controller(ReturnBookFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+    Route::get('return-books','index')->name('front.return-books.index');
+    Route::get('return-books/{returnBook:return_book_code}/detail','show')->name('front.return-books.show');
+    Route::post('return-books/{book:slug}/create/{loan:loan_code}','store')->name('front.return-books.store');
 });
 
 require __DIR__.'/auth.php';

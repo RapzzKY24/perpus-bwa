@@ -22,7 +22,7 @@ class loanFrontController extends Controller
         ->where('user_id',auth()->user()->id)
         ->filter(request()->only(['search']))
         ->sorting(request()->only(['field','direction']))
-        ->with(['book','book'])
+        ->with(['book','user'])
         ->latest('created_at')
         ->paginate(request()->load ?? 10)
         ->withQueryString();
