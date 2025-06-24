@@ -169,8 +169,18 @@ const Sidebar = ({ url, auth }) => {
                         title="Buku"
                         icon={IconBook2}
                     />
-                    <NavLink url="#" active={url.startsWith('/categories')} title="Kategori" icon={IconCategory2} />
-                    <NavLink url="#" active={url.startsWith('/loans')} title="Peminjaman" icon={IconCreditCardPay} />
+                    <NavLink
+                        url={route('front.categories.index')}
+                        active={url.startsWith('/categories')}
+                        title="Kategori"
+                        icon={IconCategory2}
+                    />
+                    <NavLink
+                        url={route('front.loans.index')}
+                        active={url.startsWith('/loans')}
+                        title="Peminjaman"
+                        icon={IconCreditCardPay}
+                    />
                     <NavLink
                         url="#"
                         active={url.startsWith('/return-books')}

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\admin\BookFrontController;
+use App\Http\Controllers\admin\CategoryFrontController;
+use App\Http\Controllers\admin\loanFrontController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -36,6 +38,16 @@ Route::controller(BookFrontController::class)->middleware(['auth','verified','ro
     Route::get('books/{book:slug}','show')->name('front.books.show');
 });
 
+Route::controller(CategoryFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+    Route::get('categories','index')->name('front.categories.index');
+    Route::get('categories/{category:slug}','show')->name('front.categories.show');
+});
+
+Route::controller(loanFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+    Route::get('loans','index')->name('front.loans.index');
+    Route::get('loans/{loan:loan_code}/detail','show')->name('front.loans.show');
+    Route::post('loans/{book:slug}/create','store')->name('front.loans.store');
+});
 
 require __DIR__.'/auth.php';
 

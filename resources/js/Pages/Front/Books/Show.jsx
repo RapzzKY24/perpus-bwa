@@ -1,5 +1,8 @@
 import { Button } from '@/Components/ui/button';
 import AppLayout from '@/Layouts/AppLayout';
+import { flashMessage } from '@/lib/utils';
+import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const Show = ({ book, page_setting }) => {
     return (
@@ -23,7 +26,24 @@ const Show = ({ book, page_setting }) => {
                         </div>
                         <div className="mt-10 flex">
                             {book.stock.available > 0 ? (
-                                <Button size="lg" variant="blue" onClick={() => console.log('Pinjam ya')}>
+                                <Button
+                                    size="lg"
+                                    variant="blue"
+                                    onClick={() =>
+                                        router.post(
+                                            route('front.loans.store', book.slug),
+                                            {},
+                                            {
+                                                preserveScroll: true,
+                                                preserveState: true,
+                                                onSuccess: (success) => {
+                                                    const flash = flashMessage(success);
+                                                    if (flash) toast[flash.type](flash.message);
+                                                },
+                                            },
+                                        )
+                                    }
+                                >
                                     Pinjam Sekarang
                                 </Button>
                             ) : (
