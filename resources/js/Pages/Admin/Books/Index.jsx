@@ -222,6 +222,7 @@ const Index = (props) => {
                                     <TableCell>{book.category?.name}</TableCell>
                                     <TableCell>{book.publisher?.name}</TableCell>
                                     <TableCell>{book.created_at}</TableCell>
+
                                     <TableCell>
                                         <div className="flex items-center gap-x-2">
                                             <Button variant="green" size="sm" asChild>

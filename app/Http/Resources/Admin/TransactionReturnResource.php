@@ -17,7 +17,7 @@ class TransactionReturnResource extends JsonResource
         return [
             'id'=> $this->id,
             'return_book_code'=> $this->return_book_code,
-            'book'=> $this->whenLoaded('book'.[
+            'book'=> $this->whenLoaded('book',[
                 'id'=> $this->book?->id,
                 'title'=> $this->book?->title
             ]),

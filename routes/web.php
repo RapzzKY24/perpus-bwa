@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\BookFrontController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -26,8 +27,13 @@ Route::middleware('auth')->group(function () {
 
 Route::get('testing',fn()=>inertia('Testing'));
 
-Route::controller(DashboardController::class)->middleware(['auth'])->group(function(){
+Route::controller(DashboardController::class)->middleware(['auth','verified'])->group(function(){
     Route::get('dashboard','index')->name('dashboard');
+});
+
+Route::controller(BookFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+    Route::get('books','index')->name('front.books.index');
+    Route::get('books/{book:slug}','show')->name('front.books.show');
 });
 
 

@@ -21,7 +21,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Models\Announcment;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth','role:admin|operator'])->prefix('admin')->group(function () {
 
     Route::controller(loanStatisticsController::class)->group(function(){
         Route::get('loan-statistics','index')->name('admin.loan-statistics.index');

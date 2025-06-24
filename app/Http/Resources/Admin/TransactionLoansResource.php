@@ -17,7 +17,7 @@ class TransactionLoansResource extends JsonResource
         return [
             'id'=> $this->id,
             'loan_code'=> $this->loan_code,
-            'book'=> $this->whenLoaded('book'.[
+            'book'=> $this->whenLoaded('book',[
                 'id'=> $this->book?->id,
                 'title'=> $this->book?->title
             ]),
