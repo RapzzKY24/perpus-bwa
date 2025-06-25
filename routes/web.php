@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\admin\BookFrontController;
 use App\Http\Controllers\admin\CategoryFrontController;
+use App\Http\Controllers\admin\FineFrontController;
 use App\Http\Controllers\admin\loanFrontController;
 use App\Http\Controllers\admin\ReturnBookFrontController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\paymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+use function Pest\Laravel\post;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -55,6 +59,16 @@ Route::controller(ReturnBookFrontController::class)->middleware(['auth','verifie
     Route::get('return-books/{returnBook:return_book_code}/detail','show')->name('front.return-books.show');
     Route::post('return-books/{book:slug}/create/{loan:loan_code}','store')->name('front.return-books.store');
 });
+
+Route::controller(paymentController::class)->group(function(){
+    Route::post('payments','create')->name('payments.create');
+    Route::post('payments/callback','callback')->name('payments.callback');
+    Route::get('payments/success','success')->name('payments.success');
+});
+
+Route::get('fines',FineFrontController::class)
+->middleware(['auth','verified','role:member'])
+->name('front.fines.index');
 
 require __DIR__.'/auth.php';
 

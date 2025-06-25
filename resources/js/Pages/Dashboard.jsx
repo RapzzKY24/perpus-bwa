@@ -4,6 +4,7 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import AppLayout from '@/Layouts/AppLayout';
+import { formatToRupiah } from '@/lib/utils';
 
 import { Link } from '@inertiajs/react';
 import {
@@ -102,7 +103,7 @@ export default function Dashboard(props) {
                             iconClasname: 'text-white',
                         }}
                     >
-                        <div className="text-2xl font-bold">{props.page_data.total_fines}</div>
+                        <div className="text-2xl font-bold">{formatToRupiah(props.page_data.total_fines)}</div>
                     </CardStats>
                 </div>
             )}

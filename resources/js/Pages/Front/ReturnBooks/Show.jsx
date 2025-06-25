@@ -8,10 +8,38 @@ import AppLayout from '@/Layouts/AppLayout';
 import { FINEPAYMENTSTATUS, formatToRupiah } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { IconCircleCheck, IconCircleKey } from '@tabler/icons-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const Show = (props) => {
     const { SUCCESS } = FINEPAYMENTSTATUS;
-    console.log(props.return_book.fine.total_fee);
+
+    const handlePayment = async () => {
+        try {
+            const response = await axios.post(route('payments.create'), {
+                order_id: props.return_book.return_book_code,
+                gross_amount: props.return_book.fine.total_fee,
+                first_name: props.return_book.user.name,
+                last_name: '',
+                email: props.return_book.user.email,
+            });
+
+            const snapToken = response.data.snap_token;
+
+            window.snap.pay(snapToken, {
+                onSuccess: (result) => {
+                    toast['success']('pembayaran sukses');
+                    // router.get(route('payments.success'));
+                },
+                onPending: (result) => toast['warning']('Pembayaran Pending'),
+                onError: (result) => toast['error']('Kesalahan Pembayaran'),
+                onClose: (result) => toast['info']('Pembayaran Ditutup'),
+            });
+        } catch (err) {
+            toast['error'](`Kesalahan pembayaran ${err}`);
+        }
+    };
+
     return (
         <div className="flex w-full flex-col space-y-4 pb-32">
             <div className="flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
@@ -56,6 +84,7 @@ const Show = (props) => {
                         <div className="ml-6 flex-1 text-sm">
                             <h5 className="text-sm font-bold leading-relaxed">
                                 {props.return_book.book.title}
+
                                 <p className="hidden text-muted-foreground lg:mt-2 lg:block">
                                     {props.return_book.book.synopsis}
                                 </p>
@@ -161,7 +190,7 @@ const Show = (props) => {
                                         </TableCell>
                                         {props.return_book.fine.payment_status !== SUCCESS && (
                                             <TableCell>
-                                                <Button variant="outline" onClick={(e) => console.log(bayar)}>
+                                                <Button variant="outline" onClick={handlePayment}>
                                                     Bayar
                                                 </Button>
                                             </TableCell>
