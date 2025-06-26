@@ -8,6 +8,7 @@ use App\Models\ReturnBook;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Throwable;
@@ -128,6 +129,10 @@ class paymentController extends Controller
                 ],400);
         }
 
+    }
+
+    public function success():Response{
+        return inertia('Payments/Success');
     }
 
 }

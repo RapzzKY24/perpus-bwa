@@ -29,7 +29,7 @@ const Show = (props) => {
             window.snap.pay(snapToken, {
                 onSuccess: (result) => {
                     toast['success']('pembayaran sukses');
-                    // router.get(route('payments.success'));
+                    router.get(route('payments.success'));
                 },
                 onPending: (result) => toast['warning']('Pembayaran Pending'),
                 onError: (result) => toast['error']('Kesalahan Pembayaran'),
