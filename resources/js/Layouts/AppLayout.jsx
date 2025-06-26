@@ -14,6 +14,7 @@ import { Toaster } from '@/Components/ui/sonner';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { AvatarImage } from '@radix-ui/react-avatar';
 import Sidebar from './Partials/Sidebar';
+import ThemeSwircher from '@/Components/ThemeSwircher';
 
 export default function AppLayout({ title, children }) {
     const auth = usePage().props.auth.user;
@@ -30,6 +31,7 @@ export default function AppLayout({ title, children }) {
                     <div className="flex h-full min-h-screen flex-col gap-2">
                         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                             <ApplicationLogo />
+                            <ThemeSwircher/>
                         </div>
                         <div className="flex-1">
                             <Sidebar url={url} auth={auth} />

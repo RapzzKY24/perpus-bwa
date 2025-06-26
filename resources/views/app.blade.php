@@ -15,10 +15,12 @@
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
+        <script src="../../public/js/Theme.js"></script>
 
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased max-h-screen">
         @inertia
+
         <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}" ></script>
     </body>
 </html>

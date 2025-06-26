@@ -1,4 +1,5 @@
 import CardStats from '@/Components/CardStats';
+import ChartCustom from '@/Components/ChartCustom';
 import HeaderTitle from '@/Components/HeaderTitle';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
@@ -107,6 +108,9 @@ export default function Dashboard(props) {
                     </CardStats>
                 </div>
             )}
+
+            <ChartCustom chartData={props.page_data.transcationCharts} />
+
             <div className="mt-3 flex w-full flex-col justify-between gap-2 lg:flex-row">
                 <Card className="w-full lg:w-1/2">
                     {/* transaksi peminjaman */}

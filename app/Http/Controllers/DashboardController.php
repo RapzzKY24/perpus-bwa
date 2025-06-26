@@ -9,9 +9,12 @@ use App\Models\Fine;
 use App\Models\Loan;
 use App\Models\ReturnBook;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Spatie\Permission\Traits\HasRoles;
+
+use function Pest\Laravel\get;
 
 class DashboardController extends Controller
 {
@@ -50,6 +53,7 @@ class DashboardController extends Controller
                 'subtitle'=> 'Menampilkan semua statistik pada platform ini!'
             ],
             'page_data'=> [
+                'transcationCharts' => $this->chart(),
                 'loans'=> TransactionLoansResource::collection($loans),
                 'return_books'=> TransactionReturnResource::collection($return_books),
                 'total_books'=> auth()->user()->hasAnyRole(['admin','operator'])?Book::count():0,
@@ -72,4 +76,52 @@ class DashboardController extends Controller
             ]
         ]);
     }
+
+    public function chart():array
+    {
+        $end_date = Carbon::now();
+
+        $start_date = $end_date->copy()->subMonth()->startOfMonth();
+
+        $loans = Loan::query()
+        ->selectRaw('DATE(loan_date) as date,COUNT(*) as loan')
+        ->when(auth()->user()->hasAnyRole(['admin','operator']), function($query){
+            return $query;
+        }, function($query){
+            return $query->where('user_id', auth()->user()->id);
+        })
+        ->whereBetween('loan_date', [$start_date, $end_date])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('loan','date');
+
+
+        $return_books = ReturnBook::query()
+        ->selectRaw('DATE(return_date) as date, COUNT(*) as return_count') // Ganti alias
+        ->when(auth()->user()->hasAnyRole(['admin','operator']), function($query){
+            return $query;
+        }, function($query){
+            return $query->where('user_id', auth()->user()->id);
+        })
+        ->whereNotNull('return_date')
+        ->whereBetween('return_date', [$start_date, $end_date])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('return_count', 'date');
+
+        $chart = [];
+
+        $period = Carbon::parse($start_date)->daysUntil($end_date);
+
+        foreach($period as $date){
+            $dateString =$date->toDateString();
+            $chart[] = [
+                'date' => $dateString,
+                'loan'=> $loans->get($dateString,0),
+                'return_book' => $return_books->get($dateString, 0)
+            ];
+        }
+        return $chart;
+    }
+
 }

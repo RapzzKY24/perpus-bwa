@@ -13,18 +13,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use function Pest\Laravel\post;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-
+Route::redirect('/','login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,29 +22,29 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('testing',fn()=>inertia('Testing'));
+
 
 Route::controller(DashboardController::class)->middleware(['auth','verified'])->group(function(){
     Route::get('dashboard','index')->name('dashboard');
 });
 
-Route::controller(BookFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+Route::controller(BookFrontController::class)->middleware(['auth','verified','dynamic.role_permission'])->group(function(){
     Route::get('books','index')->name('front.books.index');
     Route::get('books/{book:slug}','show')->name('front.books.show');
 });
 
-Route::controller(CategoryFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+Route::controller(CategoryFrontController::class)->middleware(['auth','verified','dynamic.role_permission'])->group(function(){
     Route::get('categories','index')->name('front.categories.index');
     Route::get('categories/{category:slug}','show')->name('front.categories.show');
 });
 
-Route::controller(loanFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+Route::controller(loanFrontController::class)->middleware(['auth','verified','dynamic.role_permission'])->group(function(){
     Route::get('loans','index')->name('front.loans.index');
     Route::get('loans/{loan:loan_code}/detail','show')->name('front.loans.show');
     Route::post('loans/{book:slug}/create','store')->name('front.loans.store');
 });
 
-Route::controller(ReturnBookFrontController::class)->middleware(['auth','verified','role:member'])->group(function(){
+Route::controller(ReturnBookFrontController::class)->middleware(['auth','verified','dynamic.role_permission'])->group(function(){
     Route::get('return-books','index')->name('front.return-books.index');
     Route::get('return-books/{returnBook:return_book_code}/detail','show')->name('front.return-books.show');
     Route::post('return-books/{book:slug}/create/{loan:loan_code}','store')->name('front.return-books.store');
@@ -67,7 +57,7 @@ Route::controller(paymentController::class)->group(function(){
 });
 
 Route::get('fines',FineFrontController::class)
-->middleware(['auth','verified','role:member'])
+->middleware(['auth','verified','dynamic.role_permission'])
 ->name('front.fines.index');
 
 require __DIR__.'/auth.php';

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('route_name');
             $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
-            $table->foreignId('permission_id')->constrained('permissions')->cascadeOnDelete();
+            $table->foreignId('permission_id')->nullable()->constrained('permissions')->cascadeOnDelete();
             $table->timestamps();
         });
     }

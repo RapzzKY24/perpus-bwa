@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import AppLayout from '@/Layouts/AppLayout';
 import { FINEPAYMENTSTATUS, formatToRupiah } from '@/lib/utils';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { IconCircleCheck, IconCircleKey } from '@tabler/icons-react';
 import axios from 'axios';
 import { toast } from 'sonner';
