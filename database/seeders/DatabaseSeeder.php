@@ -5,28 +5,34 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        
+        $operatorRole = Role::firstOrCreate(['name' => 'operator']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
+        // --- Buat user operator ---
+        $operatorName = 'Payme Risky1245';
         User::factory()->create([
-            'name' => $name ='Payme Risky1245',
-            'username'=>usernameGenerator($name),
+            'name' => $operatorName,
+            'username' => usernameGenerator($operatorName),
             'email' => 'aulia12345@example.com',
-        ])->assignRole(Role::create(['name'=>'operator']));
+            'password' => Hash::make('password123'), 
+        ])->assignRole($operatorRole);
 
-        // Publisher::factory()->count(10)->create();
-
-        // Category::factory()->count(32)->create();
-
+       
+        $adminName = 'AdminUser';
+        User::factory()->create([
+            'name' => $adminName,
+            'username' => usernameGenerator($adminName),
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin123'), 
+        ])->assignRole($adminRole);
     }
 }
